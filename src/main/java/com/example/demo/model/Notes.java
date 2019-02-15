@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,54 +19,24 @@ public class Notes {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTES_SEQ_ID")
-	@SequenceGenerator(name="NOTES_SEQ_ID",sequenceName="NOTES_SEQ_ID")
+	@SequenceGenerator(name="NOTES_SEQ_ID",sequenceName="NOTES_SEQ_ID",allocationSize=1)
 	private Long id ;
-	private Long thread_Id;
-	private String created_by;
-	private String Created_on;
-	private String Updated_by;
-	private String Updated_on;
+	private String createdBy;
+	@Column(nullable=false)
+	private LocalDateTime createdOn;
+	private String updatedBy;
+	private LocalDateTime updatedOn;
 	private String message;
 	
 	@ManyToOne
-	@JoinColumn(name="THREAD_ID",referencedColumnName="ID",insertable=false,updatable=false)
+	@JoinColumn(name="THREAD_ID")
 	private ThreadTable threadTable;
 	
-	public String getCreated_by() {
-		return created_by;
-	}
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
-	}
-	public String getCreated_on() {
-		return Created_on;
-	}
-	public void setCreated_on(String created_on) {
-		Created_on = created_on;
-	}
-	public String getUpdated_by() {
-		return Updated_by;
-	}
-	public void setUpdated_by(String updated_by) {
-		Updated_by = updated_by;
-	}
-	public String getUpdated_on() {
-		return Updated_on;
-	}
-	public void setUpdated_on(String updated_on) {
-		Updated_on = updated_on;
-	}
 	public String getMessage() {
 		return message;
 	}
 	public void setMessage(String message) {
 		this.message = message;
-	}
-	@Override
-	public String toString() {
-		return "Notes [id=" + id + ", Thread_id=" + thread_Id + ", created_by=" + created_by + ", Created_on="
-				+ Created_on + ", Updated_by=" + Updated_by + ", Updated_on=" + Updated_on + ", message=" + message
-				+ "]";
 	}
 	public Long getId() {
 		return id;
@@ -73,18 +45,34 @@ public class Notes {
 		this.id = id;
 	}
 	
-	public Long getThread_Id() {
-		return thread_Id;
-	}
-	public void setThread_Id(Long thread_Id) {
-		this.thread_Id = thread_Id;
-	}
 	public ThreadTable getThreadTable() {
 		return threadTable;
 	}
 	public void setThreadTable(ThreadTable threadTable) {
 		this.threadTable = threadTable;
 	}
-	
-
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public LocalDateTime getUpdatedOn() {
+		return updatedOn;
+	}
+	public void setUpdatedOn(LocalDateTime updatedOn) {
+		this.updatedOn = updatedOn;
+	}
 }

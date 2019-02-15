@@ -1,14 +1,15 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,39 +17,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name="thread")
 public class ThreadTable {
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="THREAD_SEQ_ID")
-	@SequenceGenerator(name="THREAD_SEQ_ID",sequenceName="THREAD_SEQ_ID")
-	private Long ID;
-	private String created_by;
-	private String created_on;
-	@OneToMany(mappedBy="threadTable",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	private Set<Notes> notes;
-
-	public String getCreated_on() {
-		return created_on;
-	}
-
-	public void setCreated_on(String created_on) {
-		this.created_on = created_on;
-	}
-
-
-
-	public String getCreated_by() {
-		return created_by;
-	}
-
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
-	}
-
-	@Override
-	public String toString() {
-		return "Thread [ID=" + ID + ", created_by=" + created_by + ", created_on=" + created_on + "]";
-	}
-
+	@SequenceGenerator(name="THREAD_SEQ_ID",sequenceName="THREAD_SEQ_ID",allocationSize=1)
+	private Long id;
+	private String createdBy;
+	@Column(nullable=false)
+	private LocalDateTime createdOn;
+	@OneToMany(mappedBy = "threadTable",cascade = CascadeType.ALL,orphanRemoval = true)
+	private Set<Notes> notes=new HashSet<>();
+	
 	public Set<Notes> getNotes() {
 		return notes;
 	}
@@ -56,16 +34,38 @@ public class ThreadTable {
 	protected void setNotes(Set<Notes> notes) {
 		this.notes = notes;
 	}
-public void addToNotes(Notes note) {
-	note.setThreadTable(this);
-	this.notes.add(note);
-}
-	public Long getID() {
-		return ID;
+	public void addToNotes(Notes note) {
+		this.notes.add(note);
+		note.setThreadTable(this);
+	}
+	public void removeNote(Notes note) {
+		this.notes.remove(note);
+		note.setThreadTable(null);
+    }
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setID(Long iD) {
-		ID = iD;
+	public void setId(Long id) {
+		this.id = id;
 	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+	
 	
 }
