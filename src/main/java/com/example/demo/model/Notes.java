@@ -19,7 +19,6 @@ public class Notes {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTES_SEQ_ID")
 	@SequenceGenerator(name="NOTES_SEQ_ID",sequenceName="NOTES_SEQ_ID")
 	private Long id ;
-	private Long thread_Id;
 	private String created_by;
 	private String Created_on;
 	private String Updated_by;
@@ -27,7 +26,7 @@ public class Notes {
 	private String message;
 	
 	@ManyToOne
-	@JoinColumn(name="THREAD_ID",referencedColumnName="ID",insertable=false,updatable=false)
+	@JoinColumn(name="THREAD_ID",referencedColumnName="ID")
 	private ThreadTable threadTable;
 	
 	public String getCreated_by() {
@@ -62,7 +61,7 @@ public class Notes {
 	}
 	@Override
 	public String toString() {
-		return "Notes [id=" + id + ", Thread_id=" + thread_Id + ", created_by=" + created_by + ", Created_on="
+		return "Notes [id=" + id + ", created_by=" + created_by + ", Created_on="
 				+ Created_on + ", Updated_by=" + Updated_by + ", Updated_on=" + Updated_on + ", message=" + message
 				+ "]";
 	}
@@ -73,12 +72,6 @@ public class Notes {
 		this.id = id;
 	}
 	
-	public Long getThread_Id() {
-		return thread_Id;
-	}
-	public void setThread_Id(Long thread_Id) {
-		this.thread_Id = thread_Id;
-	}
 	public ThreadTable getThreadTable() {
 		return threadTable;
 	}

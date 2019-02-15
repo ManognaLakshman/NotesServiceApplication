@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -23,8 +24,8 @@ public class ThreadTable {
 	private Long ID;
 	private String created_by;
 	private String created_on;
-	@OneToMany(mappedBy="threadTable",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	private Set<Notes> notes;
+	@OneToMany(mappedBy="threadTable",cascade=CascadeType.ALL,orphanRemoval=true)
+	private Set<Notes> notes=new HashSet<>();
 
 	public String getCreated_on() {
 		return created_on;
@@ -57,8 +58,8 @@ public class ThreadTable {
 		this.notes = notes;
 	}
 public void addToNotes(Notes note) {
-	note.setThreadTable(this);
 	this.notes.add(note);
+	note.setThreadTable(this);
 }
 	public Long getID() {
 		return ID;
