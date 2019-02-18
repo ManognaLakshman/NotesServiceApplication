@@ -1,7 +1,6 @@
 package com.example.demo;
 
-import java.time.Instant;
-import java.util.HashSet;
+import java.time.LocalDateTime;
 
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,20 +18,19 @@ public class NotesServiceApplication {
 		SpringApplication.run(NotesServiceApplication.class, args);
 	}
 
-	@SuppressWarnings("serial")
-	@Bean
+	/*@Bean
 	ApplicationRunner init(RepoThread repo) {
 		return arg -> {
 			ThreadTable threadTable=new ThreadTable();
-			threadTable.setCreated_by("Manogna");
-			threadTable.setCreated_on(Instant.now().toString());
+			threadTable.setCreatedBy("Manogna");
+			threadTable.setCreatedOn(LocalDateTime.now());
 			Notes notes=new Notes();
 			notes.setMessage("qeqweqweqw sadfs sdaf sdf");
-			notes.setCreated_by("Manogna");
+			notes.setCreatedBy("Manogna");
+			notes.setCreatedOn(LocalDateTime.now());
 			threadTable.addToNotes(notes);
 			repo.save(threadTable);
 		};
-	}
+	}*/
 
 }
-
