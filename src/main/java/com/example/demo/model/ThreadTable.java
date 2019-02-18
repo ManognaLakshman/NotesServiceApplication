@@ -68,4 +68,8 @@ public class ThreadTable {
 	}
 	
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
