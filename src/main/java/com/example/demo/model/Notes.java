@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -13,9 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="Notes")
-public class Notes {
+public class Notes implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTES_SEQ_ID")
@@ -29,6 +34,7 @@ public class Notes {
 	private String message;
 	
 	@ManyToOne(fetch=FetchType.LAZY,optional=false)
+	@JsonIgnore
 	@JoinColumn(name="THREAD_ID")
 	private ThreadTable threadTable;
 	

@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="thread")
-public class ThreadTable {
+public class ThreadTable implements Serializable  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="THREAD_SEQ_ID")
 	@SequenceGenerator(name="THREAD_SEQ_ID",sequenceName="THREAD_SEQ_ID",allocationSize=1)
@@ -24,6 +29,7 @@ public class ThreadTable {
 	private String createdBy;
 	@Column(nullable=false)
 	private LocalDateTime createdOn;
+	
 	@OneToMany(mappedBy = "threadTable",cascade = CascadeType.ALL,orphanRemoval = true)
 	private Set<Notes> notes=new HashSet<>();
 	
@@ -66,10 +72,4 @@ public class ThreadTable {
 	public void setCreatedOn(LocalDateTime createdOn) {
 		this.createdOn = createdOn;
 	}
-	
-	
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/master
