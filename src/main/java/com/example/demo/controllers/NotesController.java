@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Repository.RepoNotes;
-import com.example.demo.Repository.RepoThread;
+import com.example.demo.Repository.NotesRepository;
+import com.example.demo.Repository.ThreadRepository;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Notes;
 import com.example.demo.model.ThreadTable;
@@ -26,9 +26,9 @@ import com.example.demo.model.ThreadTable;
 public class NotesController {
 
 	@Autowired
-	RepoThread threadrepository;
+	ThreadRepository threadrepository;
 	@Autowired
-	RepoNotes notesRepo;
+	NotesRepository notesrepository;
 	
 	@GetMapping(value="/notes/{threadId}")
 	 public List<Notes> getAllNotes(@PathVariable(value="threadId") Long threadId) {
@@ -36,7 +36,7 @@ public class NotesController {
 		if(!threadrepository.existsById(threadId)){
 			throw  new ResourceNotFoundException("threadId " + threadId + "not found");
 		}
-		return notesRepo.findByThreadId(threadId);
+		return notesrepository.findByThreadId(threadId);
 	} 
 	
 	@GetMapping(value="/threads/{threadId}/notes/{notesId}")
@@ -46,7 +46,7 @@ public class NotesController {
 		if(!threadrepository.existsById(threadId)){
 			throw  new ResourceNotFoundException("threadId " + threadId + "not found");
 		}
-		return notesRepo.findByNotesandThreadId(notesId,threadId).map(notes->notes).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
+		return notesrepository.findByNotesandThreadId(notesId,threadId).map(notes->notes).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
 
 	}
 	
@@ -55,7 +55,6 @@ public class NotesController {
 		if(!org.springframework.util.StringUtils.hasText(notes.getMessage())) {
 			throw new IllegalArgumentException("Message should not be empty");
 		}
-		
 		ThreadTable threadTable=new ThreadTable();
 		threadTable.setCreatedBy("Manogna");
 		threadTable.setCreatedOn(LocalDateTime.now());
@@ -72,7 +71,7 @@ public class NotesController {
 		}
 		ThreadTable threadTable=threadrepository.findByID(threadId);
 		notesRequest.setThreadTable(threadTable);
-		return notesRepo.save(notesRequest);
+		return notesrepository.save(notesRequest);
 	}
 	
 	@PutMapping(value="/notes/{notesId}/{threadId}")
@@ -82,12 +81,10 @@ public class NotesController {
 			
 			throw  new ResourceNotFoundException("threadId " + threadId + "not found");
 		}
-		return notesRepo.findByNotesandThreadId(notesId,threadId).map(notes->{
-			notes.setUpdatedBy(notesReq.getUpdatedBy());
-			notes.setUpdatedOn(notesReq.getUpdatedOn());
-			notes.setMessage(notesReq.getMessage());
-		return notesRepo.save(notes);	
-		}).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
+		return notesrepository.findByNotesandThreadId(notesId, threadId).map(notes->{notes.setUpdatedBy("Om");
+		notes.setUpdatedOn(LocalDateTime.now());
+		notes.setMessage(notesReq.getMessage());
+		return notesrepository.save(notes);}).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
 		
 	}
 	
