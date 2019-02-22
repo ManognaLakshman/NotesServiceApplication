@@ -14,7 +14,7 @@ public class NotesServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NotesServiceApplication.class, args);
 	}
-
+/*
 	@Bean
 	ApplicationRunner init(ThreadRepository repo,NotesRepository repoNotes) {
 		return arg -> {
@@ -22,6 +22,6 @@ public class NotesServiceApplication {
 			
 			//repo.save(threadTable);
 		};
-	}
+	}*/
 
 }

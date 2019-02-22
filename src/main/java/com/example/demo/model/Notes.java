@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,6 +24,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name="Notes")
 public class Notes implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6276112242802013124L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTES_SEQ_ID")
 	@SequenceGenerator(name="NOTES_SEQ_ID",sequenceName="NOTES_SEQ_ID",allocationSize=1)
