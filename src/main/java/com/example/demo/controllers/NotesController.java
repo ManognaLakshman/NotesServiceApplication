@@ -35,7 +35,7 @@ public class NotesController {
 		if(!threadrepository.existsById(threadId)){
 			throw new ResourceNotFoundException("threadId " + threadId + " not found");
 		}
-		return notesrepository.findFirst10ByThreadId(threadId,pageable);
+		return notesrepository.findByThreadId(threadId,pageable);
 	} 
 	
 	//Fetches note associated with the threadId and records that were previously created before that last timestamp 
@@ -55,12 +55,12 @@ public class NotesController {
 		if(!threadrepository.existsById(threadId)){
 			throw new ResourceNotFoundException("threadId " + threadId + " not found");
 		}
-		return ( notesrepository.findByNotesandThreadId(notesId,threadId)).map(notes->notes).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
+		return (notesrepository.findByNotesandThreadId(notesId,threadId).map(notes->notes)).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
 
 	}
 	
 	//creates new threadId and NotesId,stores the records in the db 
-	@PostMapping(value="/threads/new")
+	@PostMapping(value="/threads/")
 	public ThreadTable AddNotes(@Valid @RequestBody Notes notes) {
 		if(!org.springframework.util.StringUtils.hasText(notes.getMessage())) {
 			throw new IllegalArgumentException("Message should not be empty");
@@ -91,7 +91,6 @@ public class NotesController {
 	public Notes updateNotes(@PathVariable (value = "noteId") Long notesId,@PathVariable (value = "threadId") Long threadId,@Valid @RequestBody Notes notesReq)
 	{
 		if(!threadrepository.existsById(threadId)){
-			
 			throw new ResourceNotFoundException("threadId " + threadId + "not found");
 		}
 		return notesrepository.findByNotesandThreadId(notesId, threadId).map(notes->{
