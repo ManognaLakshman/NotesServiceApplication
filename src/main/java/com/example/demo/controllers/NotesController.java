@@ -1,30 +1,18 @@
 package com.example.demo.controllers;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.datetime.joda.LocalDateTimeParser;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-
 import com.example.demo.Repository.NotesRepository;
 import com.example.demo.Repository.ThreadRepository;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -50,9 +38,12 @@ public class NotesController {
 		return notesrepository.findFirst10ByThreadId(threadId,pageable);
 	} 
 	
-	//Fetches note associated with the threadid and records that were previously created before that last timestamp 
-	@GetMapping(value="/notesView/{threadId}/{timeStamp}")
+	//Fetches note associated with the threadId and records that were previously created before that last timestamp 
+	@GetMapping(value="/notes/{threadId}/{timeStamp}")
 	public Page<Notes> getNextNotes(@PathVariable(value="threadId")Long threadId,@PathVariable(value="timeStamp") CharSequence timestamp,@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		if(!threadrepository.existsById(threadId)){
+			throw new ResourceNotFoundException("threadId " + threadId + " not found");
+		}
 		LocalDateTime createddateTime = LocalDateTime.parse(timestamp);
 		return notesrepository.getDetails(threadId, createddateTime,pageable);
 	}
