@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="thread")
 public class ThreadTable implements Serializable  {
+	
+	private static final long serialVersionUID = -4615975200870061557L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="THREAD_SEQ_ID")
 	@SequenceGenerator(name="THREAD_SEQ_ID",sequenceName="THREAD_SEQ_ID",allocationSize=1)

@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,15 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name="Notes")
 public class Notes implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6276112242802013124L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTES_SEQ_ID")
@@ -36,7 +30,6 @@ public class Notes implements Serializable {
 	private String message;
 	
 	@ManyToOne(fetch=FetchType.LAZY,optional=false)
-	@JsonIgnore
 	@JoinColumn(name="THREAD_ID")
 	private ThreadTable threadTable;
 	

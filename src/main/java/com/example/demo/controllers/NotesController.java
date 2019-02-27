@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.DTO.NotesDTO;
 import com.example.demo.Repository.NotesRepository;
 import com.example.demo.Repository.ThreadRepository;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Notes;
 import com.example.demo.model.ThreadTable;
+import com.example.demo.service.NotesService;
 
 
 @CrossOrigin
@@ -31,36 +34,29 @@ public class NotesController {
 	
 	//Fetches all the notes associated with ThreadID
 	@GetMapping(value="/notes/{threadId}")
-	 public Page<Notes> getAllNotes(@PathVariable(value="threadId") Long threadId,@PageableDefault(page = 0, size = 10) Pageable pageable) {
-		if(!threadrepository.existsById(threadId)){
-			throw new ResourceNotFoundException("threadId " + threadId + " not found");
-		}
-		return notesrepository.findByThreadId(threadId,pageable);
+	 public Page<Notes> getAllNotes(@PathVariable(value="threadId") Long threadId,@PageableDefault(page = 0, size = 10)
+	 Pageable pageable) {
+		return NotesService.getAllNotes(threadId,pageable);
 	} 
 	
 	//Fetches note associated with the threadId and records that were previously created before that last timestamp 
 	@GetMapping(value="/notes/{threadId}/{timeStamp}")
-	public Page<Notes> getNextNotes(@PathVariable(value="threadId")Long threadId,@PathVariable(value="timeStamp") CharSequence timestamp,@PageableDefault(page = 0, size = 10) Pageable pageable) {
-		if(!threadrepository.existsById(threadId)){
-			throw new ResourceNotFoundException("threadId " + threadId + " not found");
-		}
-		LocalDateTime createddateTime = LocalDateTime.parse(timestamp);
-		return notesrepository.getDetails(threadId, createddateTime,pageable);
+	public Page<Notes> getNextNotes(@PathVariable(value="threadId")Long threadId,@PathVariable(value="timeStamp") CharSequence
+			timestamp,@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		
+		return NotesService.getNextNotes(threadId,timestamp,pageable);
 	}
 	
 	//Fetches a specific node associated with threadID and NoteID
 	@GetMapping(value="/threads/{threadId}/notes/{notesId}")
-	public Notes getNotes(@PathVariable (value = "threadId") Long threadId,
-			@PathVariable (value = "notesId") Long notesId) {
-		if(!threadrepository.existsById(threadId)){
-			throw new ResourceNotFoundException("threadId " + threadId + " not found");
-		}
-		return (notesrepository.findByNotesandThreadId(notesId,threadId).map(notes->notes)).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
+	public Notes getNotes(@PathVariable (value = "threadId") Long threadId,@PathVariable (value = "notesId") Long notesId) {
+		
+		return NotesService.getNotes(notesId,threadId);
 
 	}
 	
 	//creates new threadId and NotesId,stores the records in the db 
-	@PostMapping(value="/threads/")
+	@PostMapping(value="/threads")
 	public ThreadTable AddNotes(@Valid @RequestBody Notes notes) {
 		if(!org.springframework.util.StringUtils.hasText(notes.getMessage())) {
 			throw new IllegalArgumentException("Message should not be empty");
@@ -73,7 +69,7 @@ public class NotesController {
     }
 
 	//creates new NotesId and saves a new record in the notes table
-	@PostMapping(value="/notes/new/{threadId}")
+	@PostMapping(value="/notes/{threadId}")
 	public Notes addNotesToThread(@PathVariable(value="threadId") Long threadId,@Valid @RequestBody Notes notesRequest) {
 
 		if(!threadrepository.existsById(threadId)){
@@ -88,7 +84,8 @@ public class NotesController {
 	
 	//Updates the Notes record	
 	@PutMapping(value="/notes/{noteId}/{threadId}")
-	public Notes updateNotes(@PathVariable (value = "noteId") Long notesId,@PathVariable (value = "threadId") Long threadId,@Valid @RequestBody Notes notesReq)
+	public Notes updateNotes(@PathVariable (value = "noteId") Long notesId,@PathVariable (value = "threadId") Long threadId,
+			@Valid @RequestBody Notes notesReq)
 	{
 		if(!threadrepository.existsById(threadId)){
 			throw new ResourceNotFoundException("threadId " + threadId + "not found");
@@ -97,7 +94,8 @@ public class NotesController {
 		notes.setUpdatedBy("Om");
 		notes.setUpdatedOn(LocalDateTime.now());
 		notes.setMessage(notesReq.getMessage());
-		return notesrepository.save(notes);}).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId + "not found"));
+		return notesrepository.save(notes);}).orElseThrow(() -> new ResourceNotFoundException("NotesId " + notesId +
+				"not found"));
 		
 	}
 	
