@@ -3,16 +3,17 @@ package com.example.demo.DTO;
 import java.time.LocalDateTime;
 
 import com.example.demo.model.ThreadTable;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 public class NotesDTO {
+	
 	private Long id ;
 	private String createdBy;
 	private LocalDateTime createdOn;
 	private String updatedBy;
 	private LocalDateTime updatedOn;
 	private String message;
-	@JsonBackReference
+	@JsonManagedReference
 	private ThreadTable threadTable;
 	
 	public NotesDTO(Long id, String createdBy, LocalDateTime createdOn, String updatedBy, LocalDateTime updatedOn,
@@ -27,6 +28,10 @@ public class NotesDTO {
 		this.threadTable = threadTable;
 	}
 	
+	public NotesDTO() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long getId() {
 		return id;
 	}

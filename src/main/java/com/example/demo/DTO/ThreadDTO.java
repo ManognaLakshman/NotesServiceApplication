@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import com.example.demo.model.Notes;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 public class ThreadDTO {
 	private Long id;
 	private String createdBy;
 	private LocalDateTime createdOn;
-	@JsonManagedReference
+	@JsonBackReference 
 	private Set<Notes> notes=new HashSet<>();
 	
 	public ThreadDTO(Long id, String createdBy, LocalDateTime createdOn, Set<Notes> notes) {
@@ -19,6 +20,9 @@ public class ThreadDTO {
 		this.createdBy = createdBy;
 		this.createdOn = createdOn;
 		this.notes = notes;
+	}
+	public ThreadDTO() {
+		// TODO Auto-generated constructor stub
 	}
 	public Long getId() {
 		return id;

@@ -42,11 +42,6 @@ public class ThreadTable implements Serializable  {
 		this.notes.add(note);
 		note.setThreadTable(this);
 	}
-	public void removeNote(Notes note) {
-		this.notes.remove(note);
-		note.setThreadTable(null);
-    }
-
 	public Long getId() {
 		return id;
 	}
